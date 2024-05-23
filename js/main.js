@@ -1,6 +1,6 @@
 // Importa las bibliotecas necesarias
 import * as THREE from "https://cdn.skypack.dev/three@0.129.0/build/three.module.js";
-import { OrbitControls } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/controls/OrbitControls.js";
+//import { OrbitControls } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/controls/OrbitControls.js";
 import { FBXLoader } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/loaders/FBXLoader.js";
 import { StereoEffect } from "https://cdn.skypack.dev/three@0.129.0/examples/jsm/effects/StereoEffect.js";
 
@@ -32,7 +32,7 @@ stereoEffect.eyeSeparation = 1;
 stereoEffect.setSize(window.innerWidth, window.innerHeight);
 
 // Inicializa los controles de órbita
-const controls = new OrbitControls(camera, renderer.domElement);
+//const controls = new OrbitControls(camera, renderer.domElement);
 
 // Verifica si el dispositivo soporta la API de dispositivos de orientación
 if (window.DeviceOrientationEvent) {
