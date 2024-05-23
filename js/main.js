@@ -27,6 +27,7 @@ const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerH
 // Crea el efecto estéreo
 const stereoEffect = new StereoEffect(renderer);
 camera.position.set(0, 40, 0)
+camera.rotation.set(Math.PI/2,0,0);
 // Configura la cámara estéreo
 stereoEffect.eyeSeparation = 1;
 stereoEffect.setSize(window.innerWidth, window.innerHeight);
@@ -51,9 +52,9 @@ function handleOrientation(event) {
 
     // Usa los datos de orientación para controlar la cámara
     // Por ejemplo, puedes rotar la cámara en función de estos ángulos
-    camera.rotation.x = THREE.MathUtils.degToRad(beta);
+    camera.rotation.x = THREE.MathUtils.degToRad(beta)+(Math.PI/2);
     camera.rotation.y = THREE.MathUtils.degToRad(gamma);
-    camera.rotation.z = THREE.MathUtils.degToRad(alpha);
+    camera.rotation.z = THREE.MathUtils.degToRad(alpha)+(Math.PI);
 
     // Recuerda que debes tener una instancia de la cámara previamente definida en tu código
     // y adaptar la lógica de control según tus necesidades específicas
