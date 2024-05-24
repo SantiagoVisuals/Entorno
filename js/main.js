@@ -35,6 +35,41 @@ stereoEffect.setSize(window.innerWidth, window.innerHeight);
 // Inicializa los controles de órbita
 //const controls = new OrbitControls(camera, renderer.domElement);
 
+window.addEventListener("gamepadconnected", (event) => {
+    const gamepad = event.gamepad;
+    console.log("Gamepad connected at index " + gamepad.index + ": " + gamepad.id);
+
+    // Comienza a escuchar cambios en el estado del controlador
+    requestAnimationFrame(checkGamepad);
+});
+
+// Función para verificar el estado del controlador
+function checkGamepad() {
+    const gamepad = navigator.getGamepads()[0]; // Obtén el primer controlador
+
+    if (gamepad) {
+        // Mapea los valores del joystick izquierdo a los cambios en la posición de la cámara
+        const sensitivity = 0.3; // Sensibilidad del joystick
+        const deltaX = -gamepad.axes[0] * sensitivity; // Movimiento en el eje x
+        const deltaY = 0; // No hay movimiento vertical en este ejemplo
+        const deltaZ = -gamepad.axes[1] * sensitivity; // Movimiento en el eje z
+
+        // Actualiza la posición de la cámara solo si está dentro de los límites
+        if ((camera.position.x + deltaX) <= 130 && (camera.position.x + deltaX) >= -130) {
+            camera.position.x += deltaX;
+        }
+        if ((camera.position.z + deltaZ) <= 52 && (camera.position.z + deltaZ) >= -52) {
+            camera.position.z += deltaZ;
+        }
+
+       
+    }
+
+    // Sigue verificando el estado del controlador
+    requestAnimationFrame(checkGamepad);
+}
+
+
 // Verifica si el dispositivo soporta la API de dispositivos de orientación
 if (window.DeviceOrientationEvent) {
     // Agrega un event listener para el evento de orientación del dispositivo
@@ -91,6 +126,7 @@ const materialPoint = new THREE.MeshBasicMaterial({ color: 0xffff00 });
 const pointMedio = new THREE.Mesh(geometryPoint, materialPoint);
 scene.add(pointMedio);
 
+pointMedio.position.set(0, 20, 0);
 pointMedio.rotation.set(Math.PI, 0, 0);
 
 const pointIzquierda = new THREE.Mesh(geometryPoint, materialPoint);
@@ -117,6 +153,23 @@ loader.load('assets/VR Gallery/VR Gallery.fbx', function (object) {
     object.rotation.set(0,0,0);
 });
 
+// Crear un punto central
+const geometryPointCentral = new THREE.ConeGeometry(3, 6, 16);
+const materialPointCentral = new THREE.MeshBasicMaterial({ color: 0xffff0 });
+const pointCentral = new THREE.Mesh(geometryPointCentral, materialPointCentral);
+scene.add(pointCentral);
+
+// Función para actualizar la posición del punto central
+function updateCentralPointPosition() {
+    // Obtener la posición de la cámara
+    const cameraPosition = new THREE.Vector3();
+    camera.getWorldPosition(cameraPosition);
+
+    // Actualizar la posición del punto central
+    pointCentral.position.copy(cameraPosition);
+}
+
+
 // Crea un esquema de luces sencillo
 const ambientLight = new THREE.AmbientLight(0xFFF3C8, 1); // Luz ambiental
 const directionalLight = new THREE.DirectionalLight(0xFFF3C8, 0.7); // Luz direccional
@@ -134,7 +187,7 @@ function animate() {
     pointMedio.position.setY(offsetY + 20);
     pointDerecha.position.setY(offsetY + 20);
     pointIzquierda.position.setY(offsetY + 20);
-
+    updateCentralPointPosition();
     // Renderiza la escena con el efecto estéreo
     stereoEffect.render(scene, camera);
 }
