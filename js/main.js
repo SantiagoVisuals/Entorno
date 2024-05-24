@@ -248,32 +248,32 @@ const materialInformacion3 = new THREE.MeshPhongMaterial({ color: 0xff0000});
 // Creación y configuración de los objetos Informacion con las texturas asignadas
 const Informacion1 = new THREE.Mesh(geometryInformacion, materialInformacion1);
 scene.add(Informacion1);
-//Informacion1.position.set(40, 36, 80);
+Informacion1.position.set(40, 36, 80);
 Informacion1.rotation.set(0, 0.785398, 0);
 
 const Informacion2 = new THREE.Mesh(geometryInformacion, materialInformacion2);
 scene.add(Informacion2);
-Informacion2.position.set(157, 36, 55);
+Informacion2.position.set(157, 36, 80);
 Informacion2.rotation.set(0, 0.785398, 0);
 
 const Informacion3 = new THREE.Mesh(geometryInformacion, materialInformacion1);
 scene.add(Informacion3);
-Informacion3.position.set(-77, 36, 55);
+Informacion3.position.set(-77, 36, 80);
 Informacion3.rotation.set(0, 0.785398, 0);
 
 const Informacion4 = new THREE.Mesh(geometryInformacion, materialInformacion2);
 scene.add(Informacion4);
-Informacion4.position.set(-40, 36, -55);
+Informacion4.position.set(-40, 36, -80);
 Informacion4.rotation.set(0, 0.785398, 0);
 
 const Informacion5 = new THREE.Mesh(geometryInformacion, materialInformacion1);
 scene.add(Informacion5);
-Informacion5.position.set(-157, 36, -55);
+Informacion5.position.set(-157, 36, -80);
 Informacion5.rotation.set(0, 0.785398, 0);
 
 const Informacion6 = new THREE.Mesh(geometryInformacion, materialInformacion2);
 scene.add(Informacion6);
-Informacion6.position.set(77, 36, -55);
+Informacion6.position.set(77, 36, -80);
 Informacion6.rotation.set(0, 0.785398, 0);
 
 
@@ -383,10 +383,13 @@ infoTextLeft.style.fontFamily = 'Arial';
 infoTextLeft.style.padding = '10px'; // Añadir relleno alrededor del texto
 infoTextLeft.style.background = 'rgba(0, 0, 0, 0.5)'; // Fondo semi-transparente
 infoTextLeft.style.borderRadius = '10px'; // Bordes redondeados
-infoTextLeft.style.maxWidth = '300px'; // Ancho máximo del contenedor
+infoTextLeft.style.maxWidth = '300px';
+infoTextLeft.style.fontSize = '10px'; // Tamaño de fuente más pequeño
+infoTextLeft.style.padding = '5px'; // Ancho máximo del contenedor
 infoTextLeft.innerHTML = `
     <p style="margin-bottom: 10px;"><strong>¡Bienvenido a nuestra galería 3D!</strong></p>
     <ul style="list-style-type: none; padding-left: 0;">
+        <li>&rarr; Es necesario un control de ps4 o xbox.</li>
         <li>&rarr; Para obtener información sobre los cuadros, simplemente haz clic sobre ellos.</li>
         <li>&rarr; Si quieres desplazarte a una posición específica, haz clic sobre los conos amarillos.</li>
         <li>&rarr; Utiliza el joystick izquierdo para moverte dentro del entorno 3D.</li>
@@ -396,7 +399,6 @@ infoTextLeft.innerHTML = `
 const infoTextRight = infoTextLeft.cloneNode(true); // Clonar el elemento para la otra cámara
 infoTextRight.style.left = ''; // Quitar la posición izquierda para que se ajuste automáticamente a la derecha
 infoTextRight.style.right = '10px'; // Posición en la parte derecha
-infoTextRight.style.textAlign = 'right'; // Alinear texto a la derecha
 infoTextRight.style.textAlign = 'left'; // Alinear texto a la izquierda en el contenedor
 infoTextRight.style.maxWidth = '300px'; // Ancho máximo del contenedor
 
