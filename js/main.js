@@ -408,6 +408,7 @@ document.body.appendChild(infoTextLeft);
 document.body.appendChild(infoTextRight);
 
 // Función para actualizar la posición de los elementos HTML en relación con la cámara izquierda
+// Función para actualizar la posición de los elementos HTML en relación con la cámara izquierda
 function updateInfoPositionLeft() {
     // Convertir la posición 3D de la cámara izquierda a la pantalla
     const vector = new THREE.Vector3();
@@ -419,14 +420,17 @@ function updateInfoPositionLeft() {
     const heightHalf = window.innerHeight / 2;
 
     // Calcular la posición de los elementos HTML en relación con la cámara izquierda
-    const x = (vector.x * widthHalf) ;
+    const x = (vector.x * widthHalf) + widthHalf;
     const y = -(vector.y * heightHalf) + heightHalf;
 
     // Actualizar la posición de los elementos HTML para la cámara izquierda
-    infoTextLeft.style.left = x + 'px';
+    infoTextLeft.style.left = x - infoTextLeft.offsetWidth + 'px'; // Restar el ancho del elemento para alinear desde el lado izquierdo
     infoTextLeft.style.top = y + 'px';
 }
 
+
+
+// Función para actualizar la posición de los elementos HTML en relación con la cámara derecha
 // Función para actualizar la posición de los elementos HTML en relación con la cámara derecha
 function updateInfoPositionRight() {
     // Convertir la posición 3D de la cámara derecha a la pantalla
@@ -443,9 +447,12 @@ function updateInfoPositionRight() {
     const y = -(vector.y * heightHalf) + heightHalf;
 
     // Actualizar la posición de los elementos HTML para la cámara derecha
-    infoTextRight.style.left = x + 'px';
+    infoTextRight.style.left = x - infoTextRight.offsetWidth + 'px'; // Restar el ancho del elemento para alinear desde el lado derecho
     infoTextRight.style.top = y + 'px';
 }
+
+
+
 
 // Llamar a las funciones para actualizar la posición inicialmente
 updateInfoPositionLeft();
