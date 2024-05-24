@@ -26,8 +26,8 @@ const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerH
 
 // Crea el efecto estéreo
 const stereoEffect = new StereoEffect(renderer);
-camera.position.set(0, 40, 0)
-camera.rotation.set(Math.PI/2,0,0);
+camera.position.set(0, 40, 0);
+camera.rotation.set(Math.PI / 2, 0, -Math.PI / 2); 
 // Configura la cámara estéreo
 stereoEffect.eyeSeparation = 1;
 stereoEffect.setSize(window.innerWidth, window.innerHeight);
@@ -44,46 +44,66 @@ if (window.DeviceOrientationEvent) {
 }
 
 // Función para manejar el evento de orientación del dispositivo
+// Guarda la rotación inicial de la cámara
+const initialRotation = new THREE.Quaternion().copy(camera.quaternion);
+
 function handleOrientation(event) {
     // Obtén los datos de la orientación del dispositivo
-    const alpha = event.alpha; // Ángulo de rotación alrededor del eje z (en grados)
-    const beta = event.beta;   // Ángulo de rotación alrededor del eje x (en grados)
-    const gamma = event.gamma; // Ángulo de rotación alrededor del eje y (en grados)
+    const alpha = THREE.MathUtils.degToRad(event.alpha); // Ángulo de rotación alrededor del eje z (en radianes)
+    const beta = THREE.MathUtils.degToRad(event.beta);   // Ángulo de rotación alrededor del eje x (en radianes)
+    const gamma = THREE.MathUtils.degToRad(event.gamma); // Ángulo de rotación alrededor del eje y (en radianes)
 
-    // Usa los datos de orientación para controlar la cámara
-    // Por ejemplo, puedes rotar la cámara en función de estos ángulos
-    camera.rotation.x = THREE.MathUtils.degToRad(beta)+(Math.PI/2);
-    camera.rotation.y = THREE.MathUtils.degToRad(gamma);
-    camera.rotation.z = THREE.MathUtils.degToRad(alpha)+(Math.PI);
+    // Calcula las cuaterniones de rotación
+    const quaternion = new THREE.Quaternion();
 
-    // Recuerda que debes tener una instancia de la cámara previamente definida en tu código
-    // y adaptar la lógica de control según tus necesidades específicas
+    // Primero aplicamos la rotación alrededor del eje z (alpha)
+    const qAlpha = new THREE.Quaternion();
+    qAlpha.setFromAxisAngle(new THREE.Vector3(0, 1, 0), alpha);
+    
+    // Luego aplicamos la rotación alrededor del eje x (beta)
+    const qBeta = new THREE.Quaternion();
+    qBeta.setFromAxisAngle(new THREE.Vector3(1, 0, 0), beta);
+    
+    // Finalmente aplicamos la rotación alrededor del eje y (gamma)
+    const qGamma = new THREE.Quaternion();
+    qGamma.setFromAxisAngle(new THREE.Vector3(0, 0, 1), gamma- Math.PI);
+    
+    // Combina las rotaciones
+    quaternion.multiply(qAlpha).multiply(qBeta).multiply(qGamma);
+
+    // Aplica la rotación inicial como referencia
+    quaternion.multiply(initialRotation);
+
+    // Aplica la rotación a la cámara
+    camera.quaternion.copy(quaternion);
 }
 
-const geometry = new THREE.BoxGeometry( 1, 1, 1 ); 
-const material = new THREE.MeshBasicMaterial( {color: 0x00ff00} ); 
-const cube = new THREE.Mesh( geometry, material ); 
-scene.add( cube );
-cube.position.set(0,90,0);
 
-const geometryPoint = new THREE.ConeGeometry( 5, 10, 32 ); 
-const materialPoint = new THREE.MeshBasicMaterial( {color: 0xffff00} );
-const pointMedio = new THREE.Mesh(geometryPoint, materialPoint ); 
-scene.add( pointMedio );
 
-pointMedio.rotation.set(Math.PI ,0,0);
+const geometry = new THREE.BoxGeometry(1, 1, 1);
+const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+const cube = new THREE.Mesh(geometry, material);
+scene.add(cube);
+cube.position.set(0, 90, 0);
 
-const pointIzquierda = new THREE.Mesh(geometryPoint, materialPoint ); 
-scene.add( pointIzquierda );
+const geometryPoint = new THREE.ConeGeometry(5, 10, 32);
+const materialPoint = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+const pointMedio = new THREE.Mesh(geometryPoint, materialPoint);
+scene.add(pointMedio);
 
-pointIzquierda.position.set(118 ,20,0);
-pointIzquierda.rotation.set(Math.PI ,0,0);
+pointMedio.rotation.set(Math.PI, 0, 0);
 
-const pointDerecha = new THREE.Mesh(geometryPoint, materialPoint ); 
-scene.add( pointDerecha );
+const pointIzquierda = new THREE.Mesh(geometryPoint, materialPoint);
+scene.add(pointIzquierda);
 
-pointDerecha.position.set(-118 ,20,0);
-pointDerecha.rotation.set(Math.PI ,0,0);
+pointIzquierda.position.set(118, 20, 0);
+pointIzquierda.rotation.set(Math.PI, 0, 0);
+
+const pointDerecha = new THREE.Mesh(geometryPoint, materialPoint);
+scene.add(pointDerecha);
+
+pointDerecha.position.set(-118, 20, 0);
+pointDerecha.rotation.set(Math.PI, 0, 0);
 
 // Crea el loader y carga el objeto FBX
 const loader = new FBXLoader();
@@ -93,12 +113,12 @@ loader.load('assets/VR Gallery/VR Gallery.fbx', function (object) {
 
     // Añade el objeto FBX a la escena
     scene.add(object);
-    object.position.set(0,0,0);
+    object.position.set(0, 0, 0);
+    object.rotation.set(0,0,0);
 });
 
-
 // Crea un esquema de luces sencillo
-const ambientLight = new THREE.AmbientLight(0xFFF3C8 , 1); // Luz ambiental
+const ambientLight = new THREE.AmbientLight(0xFFF3C8, 1); // Luz ambiental
 const directionalLight = new THREE.DirectionalLight(0xFFF3C8, 0.7); // Luz direccional
 directionalLight.position.set(0, 90, 0); // Posición de la luz direccional
 scene.add(ambientLight, directionalLight);
@@ -111,9 +131,9 @@ function animate() {
     const amplitude = 1; // Amplitud de la oscilación
     const frequency = 0.003; // Frecuencia de la oscilación
     const offsetY = amplitude * Math.sin(frequency * Date.now());
-    pointMedio.position.setY(offsetY+20);
-    pointDerecha.position.setY(offsetY+20);
-    pointIzquierda.position.setY(offsetY+20);
+    pointMedio.position.setY(offsetY + 20);
+    pointDerecha.position.setY(offsetY + 20);
+    pointIzquierda.position.setY(offsetY + 20);
 
     // Renderiza la escena con el efecto estéreo
     stereoEffect.render(scene, camera);
