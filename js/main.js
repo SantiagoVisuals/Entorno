@@ -390,6 +390,7 @@ infoTextLeft.innerHTML = `
     <p style="margin-bottom: 10px;"><strong>¡Bienvenido a nuestra galería 3D!</strong></p>
     <ul style="list-style-type: none; padding-left: 0;">
         <li>&rarr; Es necesario un control de ps4 o xbox.</li>
+        <li>&rarr; Acercate a los cuadros para interactuar.</li>
         <li>&rarr; Para obtener información sobre los cuadros, simplemente haz clic sobre ellos.</li>
         <li>&rarr; Si quieres desplazarte a una posición específica, haz clic sobre los conos amarillos.</li>
         <li>&rarr; Utiliza el joystick izquierdo para moverte dentro del entorno 3D.</li>
